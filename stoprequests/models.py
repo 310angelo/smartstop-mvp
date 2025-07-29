@@ -9,4 +9,4 @@ class StopRequest(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-         return f"Request for {self.stop.name} on bus {self.bus.bus_id} at {self.timestamp}"
+         return f"Request for {self.stop.name} on bus {self.bus.id} at {self.timestamp}"

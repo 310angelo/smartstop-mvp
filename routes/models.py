@@ -15,7 +15,7 @@ class RouteStop(models.Model):
     route = models.ForeignKey('Route', on_delete=models.CASCADE)
     stop = models.ForeignKey(Stop, on_delete=models.CASCADE)
     order = models.PositiveIntegerField
-
+    
 
 
 class Route(models.Model):
@@ -24,4 +24,4 @@ class Route(models.Model):
     stops = models.ManyToManyField('Stop', through='RouteStop')
 
     def __str__(self):
-        return f"{self.bus_id} ({self.route})"
+        return f"{self.id} ({self.name})"
