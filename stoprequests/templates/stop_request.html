@@ -1,0 +1,71 @@
+<!-- filepath: c:\Users\huang\Documents\smartstop-mvp\stoprequests\templates\stop_request.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Request a Stop</title>
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+        }
+        .container {
+            background: #fff;
+            padding: 2rem 3rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        select, button {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Route: {{ route.name }}</h2>
+<form id="stop-request-form">
+    {% csrf_token %}
+    <label for="stop">Choose your stop:</label><br>
+    <select name="stop" id="stop" required>
+        {% for stop in stops %}
+            <option value="{{ stop.id }}">{{ stop.name }}</option>
+        {% endfor %}
+    </select><br>
+    <button type="submit">Request Stop</button>
+</form>
+<script>
+document.getElementById('stop-request-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const stopId = document.getElementById('stop').value;
+    const busId = "{{ bus.id }}";
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    const response = await fetch("{% url 'stoprequest-create' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": csrfToken
+        },
+        body: JSON.stringify({
+            bus: busId,
+            stop: stopId
+        })
+    });
+
+    if (response.ok) {
+        alert("Stop request submitted!");
+        // Optionally redirect or update UI here
+    } else {
+        alert("Failed to submit stop request.");
+    }
+});
+</script>
+    </div>
+</body>
+</html>

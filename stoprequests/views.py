@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from django.http import HttpResponse
 
@@ -24,3 +24,14 @@ class StopRequestListView(generics.ListAPIView):
 class StopRequestUpdateView(generics.RetrieveUpdateDestroyAPIView):
     queryset = StopRequest.objects.all()
     serializer_class = StopRequestSerializer
+
+
+def stop_request_view(request, bus_id):
+    bus = get_object_or_404(Bus, id=bus_id)
+    route = bus.route  # Assuming Bus has a ForeignKey to Route
+    stops = Stop.objects.filter(route=route)
+    if request.method == "POST":
+        stop_id = request.POST.get("stop")
+        # Handle the stop request logic here
+        # ...
+    return render(request, "stop_request.html", {"bus": bus, "route": route, "stops": stops})

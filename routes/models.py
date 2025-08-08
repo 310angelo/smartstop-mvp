@@ -14,7 +14,13 @@ class Stop(models.Model):
 class RouteStop(models.Model):
     route = models.ForeignKey('Route', on_delete=models.CASCADE)
     stop = models.ForeignKey(Stop, on_delete=models.CASCADE)
-    order = models.PositiveIntegerField
+    order = models.PositiveIntegerField()
+
+    class Meta:
+        ordering = ['order']
+
+    def __str__(self):
+        return f"{self.route.name} - {self.stop.name} (Order: {self.order})"
     
 
 
